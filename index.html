@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>index</title>
+    </head>
+    <body>
+        <div style="width: 50%; float: right;">
+            <p id="rd_out" style="width: 95%;"></p>
+            <textarea id="rd_in" style="width: 95%; height: 50%; font-size: 15.7px;"></textarea>
+            <button type="button" onclick="rd_clear();" style="margin-top: 5px;">清除</button>
+        </div>
+
+        <div style="width: 50%; float: left;">
+            <button type="button" onclick="sp_hide();">视图</button>
+            <button id="sp_start" type="button" onclick="sp_main();">执行</button>
+            <p id="sp_ct_dis" style="width: 95%;"></p>
+            <textarea id="sp_ct" style="width: 95%;height: 50%; font-size: 15.7px;"></textarea>
+        </div>
+    </body>
+    <script>
+        //朗读
+        var mp3;
+        var cont = document.getElementById('rd_out');
+        var ct = document.getElementById('rd_in');
+
+        ct.addEventListener('keydown', function (e) {
+            if (e.keyCode === 13) {
+                mp3 = "https://fanyi.baidu.com/gettts?lan=zh&text=" + encodeURI(ct.value) + "&spd=5&source=web";
+                mp3 = new Audio(mp3);
+                mp3.play();
+                cont.innerText=cont.innerText+ct.value;
+                ct.value="";
+            }
+        });
+
+        ct.addEventListener('keyup', function (e) {
+            if (e.keyCode === 13) {
+                ct.value="";
+            }
+        });
+
+        function rd_clear(){
+            document.getElementById("rd_out").innerText="";
+        }
+
+        //分割
+        var flag=false;
+           function sp_main(){
+            var dis = document.getElementById("sp_ct").value;
+            var ct = document.getElementById("sp_ct").value;
+
+            document.getElementById("sp_ct").value = ct.replace(/@/g,"");
+            document.getElementById("sp_ct_dis").innerText = dis.replace(/@.*?@/g, "______");
+           }
+
+           function sp_hide(){
+               if(flag==false){
+               document.getElementById("sp_ct").style.display="none";
+               document.getElementById("sp_start").style.display="none";
+               flag=true;
+                }
+                else{
+                    document.getElementById("sp_ct").style.display="inline";
+                    document.getElementById("sp_start").style.display="inline";
+                    flag=false;
+                }
+           }
+    </script>
+</html>
