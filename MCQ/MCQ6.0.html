@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <title>MCQ</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+        <center>
+        <div id="num">temp_num</div>
+        <button id="play">播放</button>
+        <div id="question">temp_question</div>
+        <button id="a1" onclick="check(document.getElementById('a1'))">temp_a1</button><br>
+        <button id="a2" onclick="check(document.getElementById('a2'))">temp_a2</button><br>
+        <button id="a3" onclick="check(document.getElementById('a3'))">temp_a3</button><br>
+        <button id="a4" onclick="check(document.getElementById('a4'))">temp_a4</button>
+        </center>
+        <button id="prev">上一个</button>
+    </body>
+    <style>
+        *{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: xx-large;
+        }
+        #a1,#a2,#a3,#a4{
+            margin-top: 25px;
+        }
+        #num{
+            display: inline-block;
+            width: 52px;
+            height: 30px;
+            margin-right: 15%;
+            font-size: 18px;
+        }
+        #play{
+            margin-left: 15%;
+            font-size: 18px;
+        }
+        #prev{
+            margin-left: 32%;
+            font-size: 18px;
+        }
+    </style>
+    <script>
+        var correct = "";
+        var options = new Array("1","2","3","4");
+        var questions = new Array("a","i","u","e","o","ka","ki","ku","ke","ko");
+        var answers = new Array("あ","い","う","え","お","か","き","く","け","こ");
+        var answers2 = [].concat(answers);
+        var index = 0;
+        var question_au;
+
+    start();
+
+    function start(){
+
+        document.getElementById("a1").style.color = "";
+        document.getElementById("a2").style.color = "";
+        document.getElementById("a3").style.color = "";
+        document.getElementById("a4").style.color = "";
+
+        if(index==answers.length){
+            index=0;
+        }
+        
+        document.getElementById("num").innerText = index+1;
+
+        document.getElementById("question").innerText = questions[index];
+        question_au = new Audio("https://fanyi.baidu.com/gettts?lan=jp&text=" + answers[index] + "&spd=3&source=web");
+        setTimeout(function (){
+            question_au.play();
+        }, 350);
+        
+        document.getElementById("play").onclick=function(){
+            question_au.play();
+        }
+
+        options.sort(function() {
+        return (0.5-Math.random());
+        });
+
+        document.getElementById("a" + options[2]).innerText = answers[index];
+        correct = answers[index];
+
+        answers2.sort(function() {
+        return (0.5-Math.random());
+        });
+
+        var temp1,temp2,a=0;
+
+    while(true){
+        if(answers2[a]==correct){
+        a++;
+        }
+        else{
+        document.getElementById("a" + options[0]).innerText = answers2[a];
+        temp1 = answers2[a];
+        a = 0;
+        break;
+        }
+    }
+
+    while(true){
+        if(answers2[a]==correct||answers2[a]==temp1){
+        a++;
+        }
+        else{
+        document.getElementById("a" + options[1]).innerText = answers2[a];
+        temp2 = answers2[a];
+        a = 0;
+        break;
+        }
+    }
+
+    while(true){
+        if(answers2[a]==correct||answers2[a]==temp1||answers2[a]==temp2){
+        a++;
+        }
+        else{
+        document.getElementById("a" + options[3]).innerText = answers2[a];
+        a = 0;
+        break;
+        }
+    }
+
+    }
+
+    document.onkeydown = function(event) {
+          var e = event || window.event || arguments.callee.caller.arguments[0];
+
+          if (e && e.keyCode == 81) {
+            document.getElementById("prev").click();
+          }
+
+          if (e && e.keyCode == 49) {
+            document.getElementById("a1").click();
+          }
+
+          if (e && e.keyCode == 50) {
+            document.getElementById("a2").click();
+          }
+
+          if (e && e.keyCode == 51) {
+            document.getElementById("a3").click();
+          }
+
+          if (e && e.keyCode == 52) {
+            document.getElementById("a4").click();
+          }
+
+          if (e && e.keyCode == 82) {
+            document.getElementById("play").click();
+          }
+      };
+
+    var wrong = new Audio("wrong.mp3");
+    var right = new Audio("right.mp3");
+
+    function check(text){
+        if(text.innerText==correct){
+        right.play();
+        index++;
+        start();
+        }else
+        text.style.color="red";
+        wrong.play();
+    }
+
+    document.getElementById("prev").onclick=function(){
+        questions.length
+        if(index==0){
+            index = questions.length-1;
+            start();
+        }else{
+            index--;
+            start();
+        }
+        }
+    </script>
+</html>
